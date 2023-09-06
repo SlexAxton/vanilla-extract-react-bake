@@ -1,2 +1,3 @@
 # vanilla-extract-react-bake
-A variant-focused typesafe component factory for vanilla extract recipes, obviously
+
+Generate typed components that reflect a vanilla-extract recipe, where variants are props.
