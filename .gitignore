@@ -1,0 +1,8 @@
+node_modules
+dist
+tsconfig.tsbuildinfo
+.parcel-cache
+
+.pnp.*
+.next
+.DS_Store
