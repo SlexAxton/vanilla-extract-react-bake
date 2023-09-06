@@ -1,0 +1,22 @@
+{
+  "name": "vanilla-extract-react-bake",
+  "version": "0.1.0",
+  "description": "A variant-focused typesafe component factory for vanilla extract recipes",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SlexAxton/vanilla-extract-react-bake.git"
+  },
+  "keywords": [
+    "vanilla-extract"
+  ],
+  "author": "Alex Sexton <alexsexton@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SlexAxton/vanilla-extract-react-bake/issues"
+  },
+  "homepage": "https://github.com/SlexAxton/vanilla-extract-react-bake#readme"
+}
