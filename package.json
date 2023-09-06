@@ -1,8 +1,21 @@
 {
   "name": "vanilla-extract-react-bake",
   "version": "0.1.0",
+  "sideEffects": false,
+  
   "description": "A variant-focused typesafe component factory for vanilla extract recipes",
-  "main": "dist/index.js",
+  "main": "dist/vanilla-extract-react-bake.cjs.js",
+  "module": "dist/vanilla-extract-react-bake.esm.js",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "module": "./dist/vanilla-extract-react-bake.esm.js",
+      "default": "./dist/vanilla-extract-react-bake.cjs.js"
+    }
+  },
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +32,12 @@
     "url": "https://github.com/SlexAxton/vanilla-extract-react-bake/issues"
   },
   "homepage": "https://github.com/SlexAxton/vanilla-extract-react-bake#readme",
+  "peerDependencies": {
+    "@vanilla-extract/recipes": "^0.5.0"
+  },
+  "devDependencies": {
+    "@vanilla-extract/recipes": "^0.5.0"
+  },
   "dependencies": {
     "@babel/core": "^7.20.7",
     "@babel/preset-env": "^7.20.2",
