@@ -19,7 +19,7 @@
   "scripts": {
     "build": "preconstruct build && pnpm build:dts",
     "build:dts": "ts-node ./scripts/build-dts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
