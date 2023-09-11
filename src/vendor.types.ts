@@ -6,6 +6,6 @@ type RecipeStyleRule = ComplexStyleRule | string;
 type VariantDefinitions = Record<string, RecipeStyleRule>;
 type BooleanMap<T> = T extends 'true' | 'false' ? boolean : T;
 type VariantGroups = Record<string, VariantDefinitions>;
-type VariantSelection<Variants extends VariantGroups> = {
+export type VariantSelection<Variants extends VariantGroups> = {
   [VariantGroup in keyof Variants]?: BooleanMap<keyof Variants[VariantGroup]>;
 };
