@@ -109,9 +109,13 @@ export const RecipeComponentTest = ({
   return <BasicRecipeExtendedComponent />;
 };
 
-const ComplexRecipeComponent = bake('div', {
-  recipe: basic,
+const ComplexRecipeComponent = bake('div', basic, {
   required: ['color'],
+});
+
+export const ComplexRecipeComponent2 = bake('div', basic, {
+  // @ts-expect-error Should only allow actual variant keys from the recipe
+  required: ['not a variant'],
 });
 
 export const ComplexRecipeComponentTest = () => {
@@ -119,7 +123,7 @@ export const ComplexRecipeComponentTest = () => {
 
   // Make sure the component throws an error if we leave out a required prop
   if (rnd === 0.1) {
-    // @ts-expect-error Property 'color' is missing in type '{}' but required in type '{ color: string; }'.
+    // @ts-expect-error Property 'color' is missing in type '{}' but required in type…
     return <ComplexRecipeComponent />;
   }
 

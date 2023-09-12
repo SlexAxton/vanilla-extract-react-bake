@@ -1,5 +1,10 @@
-import type { ElementTypeOrComponent, CreateViewProps } from './types/util';
+import type {
+  ElementTypeOrComponent,
+  CreateViewProps,
+  ExtractVariants,
+} from './types/util';
 import type { VariantGroups, VariantSelection } from './types/vendor';
+import type { RuntimeFn } from '@vanilla-extract/recipes';
 
 /**
  * This function extracts variants from the props and filters out the remaining props.
@@ -9,8 +14,8 @@ import type { VariantGroups, VariantSelection } from './types/vendor';
  */
 export function extractVariants<
   T extends ElementTypeOrComponent,
-  R,
-  Req extends string[],
+  R extends RuntimeFn<VariantGroups> | string,
+  Req extends Array<Extract<keyof ExtractVariants<R>, string>> = never[],
 >(
   props: CreateViewProps<T, R, Req>,
   variantKeys: (keyof VariantGroups)[],

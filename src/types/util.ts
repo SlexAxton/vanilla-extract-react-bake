@@ -1,5 +1,5 @@
 import type { RuntimeFn } from '@vanilla-extract/recipes';
-import type { VariantSelection } from './vendor';
+import type { VariantSelection, VariantGroups } from './vendor';
 import type {
   ComponentType,
   HTMLAttributes,
@@ -90,10 +90,8 @@ export type ViewProps<T extends ElementTypeOrComponent> =
  * This type is used to enforce that certain variants are provided when using a recipe. It ensures that the required variants
  * are present in the props of the resulting component.
  */
-export type RequiredVariants<R, Req extends string[]> = {
-  [K in Req[number]]: K extends keyof ExtractVariants<R>
-    ? ExtractVariants<R>[K]
-    : never;
+export type RequiredVariants<R, Req extends Array<keyof ExtractVariants<R>>> = {
+  [K in Req[number]]: ExtractVariants<R>[K];
 };
 
 /**
@@ -112,22 +110,10 @@ export type RequiredVariants<R, Req extends string[]> = {
  */
 export type CreateViewProps<
   T extends ElementTypeOrComponent,
-  R,
-  _Req extends string[] = never,
+  R extends RuntimeFn<VariantGroups> | string = string,
+  Req extends Array<keyof ExtractVariants<R>> = never[],
 > = ViewProps<T> &
-  ExtractVariants<R> &
+  Partial<ExtractVariants<R>> &
+  RequiredVariants<R, Req> &
   React.RefAttributes<ElementFromComponent<T>>;
 // & ViewAddedProps; // TODO: add this back in
-
-/**
- * `CreateViewOptions<R>`
- *
- * When dealing with more complex requirements around the optionality of variant props, we can use the view options
- * in order to make some variant props required.
- *
- * R is always a recipe in this case, and the list of required variants must contain only valid variant keys from the recipe.
- */
-export type CreateViewOptions<R> = {
-  recipe: R;
-  required?: Array<keyof ExtractVariants<R>>;
-};
