@@ -43,15 +43,13 @@ export function bake<
     if (typeof defaultClassNameOrRecipe === 'string') {
       className = defaultClassNameOrRecipe;
     } else if (typeof defaultClassNameOrRecipe === 'function') {
-      // If defaultClassNameOrRecipe is not a string, extract variants from it
       const [variants, restProps] = extractVariants(
         props,
         defaultClassNameOrRecipe.variants(),
       );
-      // Assign the result of defaultClassNameOrRecipe with variants as argument to className
       className = defaultClassNameOrRecipe(variants);
-      // Assign the rest of the properties to filteredProps
-      filteredProps = restProps;
+      // Merge the restProps with the original props
+      filteredProps = { ...props, ...restProps };
     }
 
     // Destructure as and restProps from filteredProps
