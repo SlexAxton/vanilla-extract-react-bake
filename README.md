@@ -67,4 +67,4 @@ It's especially apparent when you look at the intellisense for components that c
 
 ### A basic recipe with one variant
 
-![A basic recipe with color variant and values: red and blue](readme_assets/basic-recipe.png)
+![A basic recipe with color variant and values: red and blue](readme_assets/bake_00.png)
