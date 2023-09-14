@@ -57,6 +57,46 @@ export const MyApp = () => {
 };
 ```
 
+## Features
+
+### Simple classname components
+
+Since we're already piped to create components with `bake`, we can also use it to create simple components that just have a classname.
+
+```tsx
+const MyComponent = bake('div', 'some-classname');
+const MyComponent2 = bake('button', [
+  'my',
+  'list',
+  'of',
+  'classnames'
+]);
+```
+
+### Required variants
+
+I'd love for there to be a way to infer whether a variant is required or not, but that doesn't seem possible with the current types in `vanilla-extract`. So instead, you can mark a variant as required in the config, which is the optional third argument.
+
+```tsx
+const MyComponent = bake('div', basic, {
+  required: ['requiredVariantName']
+});
+```
+
+### Variant prop passthrough
+
+By default, we pull out the variants from the props before we spread them onto the resulting component. In the vast majority of cases, this is what you'd want, because there is no html attribute that has the same name as your variant, and you'd make react mad at you.
+
+However, in some cases, you may want to name one of your variants after an html attribute. This tends to happen with `disabled` or `required` or something like that on form elements. For these cases you can use the `forward` config option:
+
+```tsx
+const MyComponent = bake('div', basic, {
+  forward: ['disabled']
+});
+```
+
+This will both trigger the `disabled` variant, and pass the `disabled` prop through to the resulting component.
+
 ## Why is this good?
 
 The code for actually building the components is relatively straightforward, and is only a few lines of code. The primary benefit here is the type safety that comes with it. Much like with `vanilla-extract` directly, a large amount of your code is built out at compile time. So you ship less javascript to the client, you have types that never drift from your styles, and you have to write less code by hand.
@@ -82,3 +122,7 @@ It's especially apparent when you look at the intellisense for components that c
 ![Typescript intellisense showing the variants](readme_assets/bake_03.png)
 
 ![Typescript intellisense showing the values of variants](readme_assets/bake_04.png)
+
+```
+
+```
