@@ -68,3 +68,17 @@ It's especially apparent when you look at the intellisense for components that c
 ### A basic recipe with one variant
 
 ![A basic recipe with color variant and values: red and blue](readme_assets/bake_00.png)
+
+### The variants are now known, and the config can be used to mark some of them as required
+
+![Typescript intellisense showing a red line under baked component](readme_assets/bake_01.png)
+
+### The error describes the specific prop that is missing
+
+![Typescript intellisense showing the missing required prop 'color'](readme_assets/bake_02.png)
+
+### IntelliSense for the component itself shows the variants and their values
+
+![Typescript intellisense showing the variants](readme_assets/bake_03.png)
+
+![Typescript intellisense showing the values of variants](readme_assets/bake_04.png)
