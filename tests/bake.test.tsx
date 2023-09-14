@@ -96,7 +96,7 @@ describe('bake', () => {
     });
 
     it('should allow an optional config object that allows you to specific required variant props', async () => {
-      const Component = bake(DivComponent, basic, {
+      const Component = bake('div', basic, {
         required: ['color'],
       });
 

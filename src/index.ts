@@ -15,26 +15,20 @@ import type {
 
 export function bake<
   T extends ElementTypeOrComponent,
-  R extends RuntimeFn<VariantGroups> | string = string,
+  R extends RuntimeFn<VariantGroups> | Array<string> | string = string,
   Req extends Array<Extract<keyof ExtractVariants<R>, string>> = never[],
 >(
   elementType: T,
   recipe?: R,
-  // Currently _config is not actually used at runtime, but it is used in the type system
-  // Presumably in the near future we'll use it for something else at runtime.
-  _config?: { required?: Req },
+  config?: { required?: Req; forward?: Req },
 ): React.ComponentType<CreateViewProps<T, R, Req>> {
-  // defaultClassNameOrRecipe can either be a string or a runtime function
+  // defaultClassNameOrRecipe can either be a string or a recipe runtime function
   let defaultClassNameOrRecipe: R | undefined = recipe;
 
-  // Create a component with forwardRef
-  const Component = forwardRef(function _createView(
-    // props are the properties of the component
+  const Component = forwardRef(function BakedComponent(
     props: CreateViewProps<T, R> & RequiredVariants<R, Req>,
-    // ref is a reference to the component
     ref: React.Ref<ElementFromComponent<T>>,
   ) {
-    // className is either a string or undefined
     let className: string | undefined;
     // filteredProps are the properties after extracting variants
     let filteredProps = props;
@@ -42,14 +36,30 @@ export function bake<
     // If defaultClassNameOrRecipe is a string, assign it to className
     if (typeof defaultClassNameOrRecipe === 'string') {
       className = defaultClassNameOrRecipe;
+    } else if (Array.isArray(defaultClassNameOrRecipe)) {
+      className = defaultClassNameOrRecipe.join(' ');
     } else if (typeof defaultClassNameOrRecipe === 'function') {
-      const [variants, restProps] = extractVariants(
+      // TODO: after a bunch of refactors, i think there's some redundant prop
+      // filtering and merging happening here, even though the outcome is correct.
+      const [variants, nonVariantProps] = extractVariants(
         props,
         defaultClassNameOrRecipe.variants(),
       );
       className = defaultClassNameOrRecipe(variants);
       // Merge the restProps with the original props
-      filteredProps = { ...props, ...restProps };
+      filteredProps = { ...props, ...nonVariantProps };
+      // Remove any of the variant keys from the eventual
+      // props. This is necessary because of intrinsic props
+      // that we don't know about at compile time. e.g. data-testid
+      const variantKeys = Object.keys(variants);
+      for (let i = 0; i < variantKeys.length; i++) {
+        const key = variantKeys[i] as Extract<keyof ExtractVariants<R>, string>;
+        // If the user has specifically opted to forward the variant along to
+        // the component, we'll skip the deletion
+        if (!config || !config.forward || !config.forward.includes(key)) {
+          delete filteredProps[key];
+        }
+      }
     }
 
     // Destructure as and restProps from filteredProps

@@ -24,6 +24,16 @@ export const ComponentComponentTest = () => {
   return <ComponentComponent />;
 };
 
+// Test that an array of string classNames can be set as the second argument
+// to bake
+const StringClassArrayComponent = bake('div', [
+  'string-class-a',
+  'string-class-b',
+]);
+export const StringClassArrayComponentTest = () => {
+  return <StringClassArrayComponent />;
+};
+
 // Test that bake accepts a class string as the second argument
 // when a component is provided as the first argument
 const ComponentStringClassComponent = bake(
@@ -37,6 +47,22 @@ export const ComponentStringClassComponentTest = () => {
   }
 
   return <ComponentStringClassComponent />;
+};
+
+// Test that bake accepts an array of class strings as the second argument
+// when a component is provided as the first argument
+const ComponentStringArrayClassComponent = bake(StringClassComponent, [
+  'string-class3-a',
+  'string-class3-b',
+]);
+
+export const ComponentStringArrayClassComponentTest = () => {
+  if (Math.random() > 0.5) {
+    // Also make sure that we can still add classes to the resulting component
+    return <ComponentStringArrayClassComponent className="additional-class" />;
+  }
+
+  return <ComponentStringArrayClassComponent />;
 };
 
 // Test that a recipe can be applied to a string element

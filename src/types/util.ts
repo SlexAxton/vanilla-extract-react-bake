@@ -110,7 +110,7 @@ export type RequiredVariants<R, Req extends Array<keyof ExtractVariants<R>>> = {
  */
 export type CreateViewProps<
   T extends ElementTypeOrComponent,
-  R extends RuntimeFn<VariantGroups> | string = string,
+  R extends RuntimeFn<VariantGroups> | Array<string> | string = string,
   Req extends Array<keyof ExtractVariants<R>> = never[],
 > = ViewProps<T> &
   Partial<ExtractVariants<R>> &
