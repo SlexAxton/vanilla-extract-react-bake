@@ -64,8 +64,9 @@ export const MyApp = () => {
 Since we're already piped to create components with `bake`, we can also use it to create simple components that just have a classname.
 
 ```tsx
-const MyComponent = bake('div', 'some-classname');
-const MyComponent2 = bake('button', [
+const MyComponent1 = bake('div');
+const MyComponent2 = bake('div', 'some-classname');
+const MyComponent3 = bake('button', [
   'my',
   'list',
   'of',
@@ -96,6 +97,20 @@ const MyComponent = bake('div', basic, {
 ```
 
 This will both trigger the `disabled` variant, and pass the `disabled` prop through to the resulting component.
+
+### Classname merging
+
+The resulting components from `bake` can be used with other classnames, and the resulting classnames will be merged together.
+
+```tsx
+const MyComponent = bake('div', 'some-classname');
+
+export const MyApp = () => {
+  return <MyComponent className="another-classname" />;
+};
+```
+
+The resulting html will append them together in the order of the `bake` classname, and then the inlined classname.
 
 ## Why is this good?
 
