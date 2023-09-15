@@ -4,7 +4,7 @@
 import type { HTMLAttributes } from 'react';
 import { render, screen } from '@testing-library/react';
 import { basic } from './recipes.css';
-import { bake } from '../src/index';
+import { bake, makeBake } from '../src/index';
 
 const DivComponent = (props: HTMLAttributes<HTMLDivElement>) => (
   <div {...props} />
@@ -175,6 +175,64 @@ describe('bake', () => {
 
       expect(elem).toBeInTheDocument();
       expect(elem.className).toEqual(expect.stringContaining('color_blue'));
+    });
+  });
+
+  describe('advanced', () => {
+    it('should allow you to inject additional props into the resulting component', async () => {
+      const Component = bake('div', basic, {
+        inject: {
+          // This adds a 'css' prop that just passes the value through to the style attribute
+          css: (val: React.CSSProperties) => {
+            return { style: val };
+          },
+        },
+      });
+
+      render(<Component data-testid="bake-9-div" css={{ color: '#BADA55' }} />);
+
+      const elem = screen.getByTestId('bake-9-div');
+      expect(elem).toHaveStyle({ color: '#BADA55' });
+    });
+
+    it('should allow you to make your own bake function with makeBake that has built in injections', async () => {
+      const myBake = makeBake({
+        // This adds a 'css' prop that just passes the value through to the style attribute
+        css: (val: React.CSSProperties) => {
+          return { style: val };
+        },
+      });
+
+      const Component = myBake('div', basic);
+
+      render(
+        <Component data-testid="bake-10-div" css={{ color: '#BADA66' }} />,
+      );
+
+      const elem = screen.getByTestId('bake-10-div');
+      expect(elem).toHaveStyle({ color: '#BADA66' });
+    });
+
+    it('should prefer component inject over makebake inject if there are collisions', async () => {
+      const myBake = makeBake({
+        // This adds a 'css' prop that just passes the value through to the style attribute
+        css: (val: React.CSSProperties) => {
+          return { style: val };
+        },
+      });
+
+      const Component = myBake('div', basic, {
+        inject: {
+          css: (val: string) => {
+            return { 'data-css': val };
+          },
+        },
+      });
+
+      render(<Component data-testid="bake-10-div" css="its the string one" />);
+
+      const elem = screen.getByTestId('bake-10-div');
+      expect(elem.getAttribute('data-css')).toEqual('its the string one');
     });
   });
 });

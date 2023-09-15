@@ -143,6 +143,65 @@ export const MyApp = () => {
 
 The resulting html will append them together in the order of the `bake` classname, and then the inlined classname.
 
+## Advanced features that are probably buggy
+
+### `inject`
+
+This feature allows you to inject a prop builder for a custom prop on the resulting component. This is useful for entirely different reasons than most of the rest of the code, but it's nearly free to add to this specific code, so I thought I'd give it a shot.
+
+It's useful when you want your component to have some sort of custom prop, and the value passed to that prop results in values being set on other non-custom props.
+
+```tsx
+const MyComponent = bake('div', basic, {
+  inject: {
+    // This adds a 'css' prop that just passes the
+    // value through to the style attribute
+    css: (val: React.CSSProperties) => {
+      return { style: val };
+    }
+  }
+});
+
+export const MyApp = () => {
+  // the `css` prop here is typed as React.CSSProperties
+  // from the declaration above in the inject config
+  return <MyComponent css={{ color: '#BADA55' }} />;
+};
+```
+
+This particular example of just 'renaming' the `style` attribute to `css` isn't interesting, but you could imagine that `css` takes in the values from your css-in-js library of choice, and then outputs the actual style values to the `style` attribute, or emits a class to className.
+
+**NOTE**: there's a lot of nuance in the order that injected props are executed and merged together. They also don't have any other introspection into the component values at the moment (e.g. you can't read the value of children and use it to build your result).
+
+## `makeBake`
+
+I think `inject` is quite powerful when you can use it across your entire design system. However, it's a bit of a bummer to need to pass the same `inject` config to every single `bake` call. So I've added a `makeBake` function that allows you to create a `bake` function that has the `inject` config already applied.
+
+```tsx
+import { makeBake } from 'vanilla-extract-react-bake';
+
+const myBake = makeBake({
+  inject: {
+    // This adds a 'css' prop that just passes the
+    // value through to the style attribute
+    css: (val: React.CSSProperties) => {
+      return { style: val };
+    }
+  }
+});
+
+// myBake is now a function that can be used to create components
+// just like `bake`, but the `css` injection we did above will
+// always be applied to all resulting components
+const MyComponent = myBake('div', basic);
+
+export const MyApp = () => {
+  // the `css` prop here is typed as React.CSSProperties
+  // from the declaration above in the inject config
+  return <MyComponent css={{ color: '#BADA55' }} />;
+};
+```
+
 ## Why is this good?
 
 The code for actually building the components is relatively straightforward, and is only a few lines of code. The primary benefit here is the type safety that comes with it. Much like with `vanilla-extract` directly, a large amount of your code is built out at compile time. So you ship less javascript to the client, you have types that never drift from your styles, and you have to write less code by hand.
