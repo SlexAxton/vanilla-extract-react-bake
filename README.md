@@ -173,7 +173,7 @@ This particular example of just 'renaming' the `style` attribute to `css` isn't 
 
 **NOTE**: there's a lot of nuance in the order that injected props are executed and merged together. They also don't have any other introspection into the component values at the moment (e.g. you can't read the value of children and use it to build your result).
 
-## `makeBake`
+### `makeBake`
 
 I think `inject` is quite powerful when you can use it across your entire design system. However, it's a bit of a bummer to need to pass the same `inject` config to every single `bake` call. So I've added a `makeBake` function that allows you to create a `bake` function that has the `inject` config already applied.
 
