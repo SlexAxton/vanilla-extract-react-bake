@@ -19,7 +19,8 @@
   "scripts": {
     "build": "preconstruct build && pnpm build:dts",
     "build:dts": "ts-node ./scripts/build-dts",
-    "test": "jest"
+    "test": "jest",
+    "release": "pnpm build && changeset publish"
   },
   "repository": {
     "type": "git",
