@@ -131,6 +131,39 @@ describe('bake', () => {
       expect(elem.getAttribute('disabled')).toEqual('');
     });
 
+    it('should allow the `as` prop on the resulting component to change the underlying element', async () => {
+      const Component = bake('div', basic);
+
+      render(<Component data-testid="bake-8-div" as="button" />);
+
+      const elem = screen.getByTestId('bake-8-div');
+
+      expect(elem).toBeInTheDocument();
+      expect(elem.tagName).toEqual('BUTTON');
+    });
+
+    it('should allow a component in the as prop as well', async () => {
+      const AltComponent = bake('button', 'foo-class');
+      const Component = bake('div', basic);
+
+      render(
+        <Component
+          data-testid="bake-8-div"
+          as={AltComponent}
+          color="blue"
+          className="inline-class"
+        />,
+      );
+
+      const elem = screen.getByTestId('bake-8-div');
+
+      expect(elem).toBeInTheDocument();
+      expect(elem.tagName).toEqual('BUTTON');
+      expect(elem).toHaveClass('foo-class');
+      expect(elem).toHaveClass('inline-class');
+      expect(elem.className).toEqual(expect.stringContaining('color_blue'));
+    });
+
     it('should allow an optional config object that allows you to specific required variant props', async () => {
       const Component = bake('div', basic, {
         required: ['color'],

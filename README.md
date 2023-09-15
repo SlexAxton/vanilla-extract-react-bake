@@ -98,6 +98,37 @@ const MyComponent = bake('div', basic, {
 
 This will both trigger the `disabled` variant, and pass the `disabled` prop through to the resulting component.
 
+### `as` Runtime base component override
+
+In some cases you want to override the underlying that was extended at runtime. It's not suggested to make large shifts in the base component type, but usually just provide a more specific version of the same thing. Though it also pays off in some cases where you're abstracting over something like a `link` and `button` behind the scenes.
+
+Honestly I don't know how strong the types are when you do this. I'm not smart enough yet to understand how that would work.
+
+You can pass a string
+
+```tsx
+const MyComponent = bake('div', basic);
+
+export const MyApp = () => {
+  return <MyComponent as="span">Hello world</MyComponent>;
+};
+```
+
+Or you can pass another component
+
+```tsx
+import { Link as NextLink } from 'next/link';
+import { Link } from './myBakedLink';
+
+export const MyApp = () => {
+  return (
+    <Link as={NextLink} href="/some-page">
+      Some page
+    </Link>
+  );
+};
+```
+
 ### Classname merging
 
 The resulting components from `bake` can be used with other classnames, and the resulting classnames will be merged together.

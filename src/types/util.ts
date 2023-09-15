@@ -64,6 +64,13 @@ export type ElementFromComponent<T extends ElementTypeOrComponent> =
     : never;
 
 /**
+ * `AsProp`
+ *
+ * This is the prop that allows you to change the underlying element type of a component at runtime
+ */
+export type AsProp = string | React.ComponentType<any>;
+
+/**
  * `ViewProps<T>`
  *
  * This type takes a generic parameter `T` which extends `ElementTypeOrComponent`. It checks if
@@ -73,12 +80,13 @@ export type ElementFromComponent<T extends ElementTypeOrComponent> =
  * We use this function in order to try to determine the existing allowable props for the provided
  * component or element type string that's provided to the bake function.
  */
-export type ViewProps<T extends ElementTypeOrComponent> =
-  T extends keyof JSX.IntrinsicElements
-    ? HTMLAttributes<ElementFromComponent<T>>
-    : T extends ComponentType<infer P>
-    ? P
-    : never;
+export type ViewProps<T extends ElementTypeOrComponent> = {
+  as?: AsProp;
+} & (T extends keyof JSX.IntrinsicElements
+  ? HTMLAttributes<ElementFromComponent<T>>
+  : T extends ComponentType<infer P>
+  ? P
+  : never);
 
 /**
  * `RequiredVariants<R, Req>`
@@ -116,4 +124,3 @@ export type CreateViewProps<
   Partial<ExtractVariants<R>> &
   RequiredVariants<R, Req> &
   React.RefAttributes<ElementFromComponent<T>>;
-// & ViewAddedProps; // TODO: add this back in
