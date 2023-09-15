@@ -4,6 +4,9 @@ export const basic = recipe({
   base: {},
 
   variants: {
+    disabled: {
+      true: {},
+    },
     spaceWithDefault: {
       small: {},
       large: {},
@@ -31,24 +34,4 @@ export const basic = recipe({
       style: {},
     },
   ],
-});
-
-export const empty = recipe({});
-
-export const definedStringBase = recipe({
-  base: 'definedStringBase',
-  variants: {
-    variant: {
-      simple: 'simple-one',
-    },
-  },
-});
-
-export const definedStringBaseArray = recipe({
-  base: ['definedStringBaseInArray_1', 'definedStringBaseInArray_2'],
-  variants: {
-    variant: {
-      simple: ['simple-one', 'simple-two'],
-    },
-  },
 });

@@ -47,6 +47,16 @@ describe('bake', () => {
       expect(screen.getByTestId('bake-2-div')).toHaveClass('test-class');
     });
 
+    it('should add a set of classNames to the component if the second arg is an array of strings', async () => {
+      const Component = bake('div', ['test-class-1', 'test-class-2']);
+
+      render(<Component data-testid="bake-7-div" />);
+
+      expect(screen.getByTestId('bake-7-div')).toHaveClass(
+        'test-class-1 test-class-2',
+      );
+    });
+
     it('should allow the resulting component to merge class names on top of the provided ones', async () => {
       const Component = bake('div', 'test-class');
 
@@ -95,14 +105,40 @@ describe('bake', () => {
       );
     });
 
+    it('should not add variant props as props on the underlying component', async () => {
+      const Component = bake('div', basic);
+
+      render(<Component data-testid="bake-5-div" disabled />);
+
+      const elem = screen.getByTestId('bake-5-div');
+
+      expect(elem).toBeInTheDocument();
+      expect(elem.getAttribute('disabled')).toBeNull();
+      expect(elem.getAttribute('disabled')).not.toEqual('');
+    });
+
+    it('should forward variant props as props on the underlying component if configured', async () => {
+      const Component = bake('div', basic, {
+        forward: ['disabled'],
+      });
+
+      render(<Component data-testid="bake-5-div" disabled />);
+
+      const elem = screen.getByTestId('bake-5-div');
+
+      expect(elem).toBeInTheDocument();
+      expect(elem.getAttribute('disabled')).not.toBeNull();
+      expect(elem.getAttribute('disabled')).toEqual('');
+    });
+
     it('should allow an optional config object that allows you to specific required variant props', async () => {
       const Component = bake('div', basic, {
         required: ['color'],
       });
 
-      render(<Component data-testid="bake-5-div" color="blue" />);
+      render(<Component data-testid="bake-6-div" color="blue" />);
 
-      const elem = screen.getByTestId('bake-5-div');
+      const elem = screen.getByTestId('bake-6-div');
 
       expect(elem).toBeInTheDocument();
       expect(elem.className).toEqual(expect.stringContaining('color_blue'));
