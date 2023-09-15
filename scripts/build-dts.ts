@@ -80,17 +80,11 @@ async function removePreconstructDeclarations(
   });
 }
 
-console.log('dirname', __dirname);
-
 (async () => {
   const entryPaths: [string, string][] = [];
 
   const root = path.resolve(__dirname, '..');
-  console.log('ROOT', root)
-  entryPaths.push([
-    root,
-    "./dist/vanilla-extract-react-bake.cjs.js"
-  ]);
+  entryPaths.push([root, './dist/vanilla-extract-react-bake.cjs.js']);
 
   await Promise.all(
     entryPaths.map(([packageDir, entryPath]) =>
