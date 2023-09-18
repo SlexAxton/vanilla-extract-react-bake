@@ -213,6 +213,28 @@ describe('bake', () => {
       expect(elem).toHaveStyle({ color: '#BADA66' });
     });
 
+    it('should merge props nicely if they are there from injection', async () => {
+      const myBake = makeBake({
+        css: (classAddition: string) => {
+          return { className: `fromMakeInject-${classAddition}` };
+        },
+      });
+
+      const Component = myBake('div', basic);
+
+      render(
+        <Component
+          data-testid="bake-10-div"
+          css="foo"
+          className="inline-class"
+        />,
+      );
+
+      const elem = screen.getByTestId('bake-10-div');
+      expect(elem).toHaveClass('fromMakeInject-foo');
+      expect(elem).toHaveClass('inline-class');
+    });
+
     it('should prefer component inject over makebake inject if there are collisions', async () => {
       const myBake = makeBake({
         // This adds a 'css' prop that just passes the value through to the style attribute
