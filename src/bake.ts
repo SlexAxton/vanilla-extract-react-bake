@@ -80,6 +80,7 @@ export function bake<
       const addlPropKeys = Object.keys(config.inject);
       for (let i = 0; i < addlPropKeys.length; i++) {
         const key = addlPropKeys[i];
+        delete restProps[key];
         const propBuilder = config.inject[key];
         const valuePassedToComponent = props[key];
         propObjs.push(propBuilder(valuePassedToComponent));

@@ -256,5 +256,26 @@ describe('bake', () => {
       const elem = screen.getByTestId('bake-10-div');
       expect(elem.getAttribute('data-css')).toEqual('its the string one');
     });
+
+    it('should not inject the injected prop onto the dom node', async () => {
+      const myBake = makeBake({
+        // This adds a 'css' prop that just passes the value through to the style attribute
+        css: (val: React.CSSProperties) => {
+          return { style: val };
+        },
+      });
+
+      const Component = myBake('div', basic);
+
+      render(
+        <Component
+          data-testid="bake-14-div"
+          css={{ border: '1px solid green' }}
+        />,
+      );
+
+      const elem = screen.getByTestId('bake-14-div');
+      expect(elem.getAttribute('css')).toBeNull();
+    });
   });
 });
