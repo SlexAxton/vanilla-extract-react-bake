@@ -74,6 +74,16 @@ const MyComponent3 = bake('button', [
 ]);
 ```
 
+### Regular vanilla extract
+
+Since it works with regular classname, that means we can also use it for regular vanilla extract imports.
+
+```tsx
+import { myStyles } from './myStyles.css';
+
+const MyComponent = bake('div', myStyles);
+```
+
 ### Required variants
 
 I'd love for there to be a way to infer whether a variant is required or not, but that doesn't seem possible with the current types in `vanilla-extract`. So instead, you can mark a variant as required in the config, which is the optional third argument.
